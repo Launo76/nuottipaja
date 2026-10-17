@@ -1,14 +1,13 @@
-/* Nuottipaja – tiivis nuottilukija, ladataan mobile.css:n jälkeen */
-:root{--np-reader-bottom:env(safe-area-inset-bottom,0px)}
-body.np-present{background:#fff!important;color:#101820!important}
-body.np-present .np-score-panel{background:#fff!important;padding:0!important;margin:0!important}
-body.np-present #score{background:#fff!important;color:#111!important;border-radius:0!important;padding:0 3px 95px!important;min-height:80vh!important;overflow-x:hidden!important;overflow-y:visible!important;touch-action:pan-y}
-body.np-present #score svg{display:block!important;max-width:100%!important;width:100%!important;min-width:0!important;height:auto!important;margin:0 auto!important}
-body.np-present .np-mobilebar{background:#101f33f2!important}
-body.np-present .np-present-actions{top:auto!important;bottom:calc(78px + var(--np-reader-bottom))!important;right:8px!important;left:auto!important;box-shadow:0 2px 12px #0003}
-body.np-present .np-toolrow{display:none!important}
+/* Lukunäkymä v3: käytetään reader.css:n tilalla. */
+body.np-present{background:#fff!important;color:#111!important}
 body.np-present .wrap{max-width:none!important;margin:0!important;padding:0!important}
-/* Piilota tulosteen sivukehykset ja palkin ulkopuoliset rakenteet */
-#score .np-reader-note{color:#526273;font-size:13px}
-@media(max-width:720px){body.np-present #score{padding:0 2px 96px!important}body.np-present .np-present-actions button{font-size:12px;min-height:36px!important;padding:7px 9px!important}}
-@media print{body.np-present #score{padding:0!important;min-height:0!important}body.np-present .np-mobilebar,body.np-present .np-present-actions{display:none!important}}
+body.np-present .np-score-panel{background:#fff!important;padding:0!important;margin:0!important;border:0!important}
+body.np-present #score{background:#fff!important;color:#111!important;border-radius:0!important;padding:4px 5px 42px!important;min-height:0!important;overflow-x:hidden!important;overflow-y:visible!important;touch-action:pan-y}
+body.np-present #score svg{display:block!important;max-width:100%!important;width:100%!important;height:auto!important;margin:0!important}
+body.np-present .np-toolrow{display:none!important}
+/* Esityspainikkeet pysyvät ylhäällä, eikä alareuna peitä nuotteja. */
+body.np-present .np-present-actions{position:sticky!important;top:0!important;bottom:auto!important;left:auto!important;right:auto!important;z-index:30!important;width:max-content!important;margin:0 0 0 auto!important;padding:4px 6px!important;border-radius:0 0 0 12px!important;box-shadow:0 1px 8px #0003!important;background:#182b40ee!important}
+body.np-present .np-present-actions button{font-size:13px!important;min-height:36px!important;padding:6px 10px!important}
+body.np-present .np-mobilebar{display:none!important}
+@media(max-width:720px){body.np-present #score{padding:4px 2px 20px!important}}
+@media print{body.np-present .np-present-actions,body.np-present .np-mobilebar{display:none!important}body.np-present #score{padding:0!important}}
