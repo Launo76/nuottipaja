@@ -1,0 +1,1 @@
+Nuottipaja 1.2 – automaattinen sävellajin tunnistus MusicXML/MXL-tiedostoista. Korvaa GitHub-repositorion juuren index.html tällä tiedostolla. Valokuvien ja PDF-nuottien lukeminen ei vielä toimi. Jos MusicXML ei sisällä mode-tietoa, ohjelma ilmoittaa duuri/molli-epävarmuudesta.
