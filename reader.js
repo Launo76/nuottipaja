@@ -1,54 +1,71 @@
-/* Nuottipaja – mobiilin nuottilukija v2. Sävelten transponointilogiikkaa ei muuteta. */
+/* Nuottipaja – lukunäkymä v3. Korvaa vain nuottien näyttöä, ei transponointia. */
 (() => {
   'use strict';
   const score = document.getElementById('score');
-  if (!score || typeof window.opensheetmusicdisplay === 'undefined') return;
-  const OSMD = window.opensheetmusicdisplay.OpenSheetMusicDisplay;
-  let renderedXml = null;
-  let resizeTimer = null;
-  let generation = 0;
-  const options = {
-    autoResize: false, backend: 'svg',
-    pageFormat: 'Endless',
-    drawTitle: false, drawSubtitle: false, drawComposer: false,
-    drawLyricist: false, drawPartNames: false, drawMeasureNumbers: false,
-    drawFingerings: true, spacingFactor: 0.8,
-    renderSingleHorizontalStaffline: false
-  };
+  const OSMD = window.opensheetmusicdisplay?.OpenSheetMusicDisplay;
+  if (!score || !OSMD) return;
+  let lastXml = null;
+  let pending = 0;
+  let serial = 0;
+  // Alkuperäinen MusicXML pysyy muuttumattomana. Tästä vain rivitysvihjeet poistetaan
+  // näyttöä varten; alkuperäinen tiedosto ja ladattava transponoitu XML säilyvät ennallaan.
+  function flowingXml(xml) {
+    try {
+      const doc = new DOMParser().parseFromString(xml, 'application/xml');
+      if (doc.querySelector('parsererror')) return xml;
+      doc.querySelectorAll('print').forEach(el => {
+        el.removeAttribute('new-system');
+        el.removeAttribute('new-page');
+      });
+      return new XMLSerializer().serializeToString(doc);
+    } catch (_) { return xml; }
+  }
   async function draw(xml) {
     if (!xml) return;
-    const id = ++generation;
-    const screen = document.body.classList.contains('np-present');
-    // Oikea viivastojen määrä lasketaan käytettävissä olevan ruudun leveyden mukaan.
+    lastXml = xml;
+    const call = ++serial;
+    const presentation = document.body.classList.contains('np-present');
+    const width = Math.max(280, score.parentElement?.clientWidth || window.innerWidth);
+    // Pienessä puhelimessa kahdesta tahdista lähdetään liikkeelle;
+    // isommalle ruudulle kirjasto saa rivittää automaattisesti.
+    const phone = width < 760;
     score.style.width = '100%';
-    score.style.setProperty('--np-zoom', '1');
+    score.style.maxWidth = '100%';
     score.innerHTML = '';
-    const view = new OSMD(score, {...options, pageFormat: screen ? 'Endless' : 'Endless'});
-    await view.load(xml);
-    if (id !== generation) return;
-    view.Zoom = 1;
+    const view = new OSMD(score, {
+      autoResize:false, backend:'svg', pageFormat:'Endless',
+      drawTitle:false, drawSubtitle:false, drawComposer:false,
+      drawLyricist:false, drawPartNames:false, drawPartAbbreviations:false,
+      drawMeasureNumbers:false, drawFingerings:true,
+      newSystemFromXML:false, newPageFromXML:false,
+      newSystemFromNewPageInXML:false,
+      renderSingleHorizontalStaffline:false,
+      spacingFactor:0.75
+    });
+    await view.load(flowingXml(xml));
+    if (call !== serial) return;
+    // Rivikohtainen pakko: kaksi tahtia puhelimessa, tietokoneella 0=automaattinen.
+    // Myös kohotahti lasketaan omaksi tahdikseen.
+    view.EngravingRules.RenderXMeasuresPerLineAkaSystem = phone ? 2 : 0;
+    view.EngravingRules.StaffDistance = 5;
+    view.EngravingRules.SystemDistance = 7;
+    view.Zoom = phone ? 0.85 : 1;
     view.render();
-    if (id !== generation) return;
-    renderedXml = xml;
-    // OSMD voi asettaa kuvapinnan leveyden kiinteäksi; CSS sovittaa sen puhelimeen.
+    if (call !== serial) return;
     score.querySelectorAll('svg').forEach(svg => {
-      svg.style.maxWidth = '100%';
       svg.style.width = '100%';
+      svg.style.maxWidth = '100%';
       svg.style.height = 'auto';
+      svg.style.display = 'block';
     });
   }
-  // Korvaa vain sivuasettelu; vanha transponointi, toisto ja MusicXML-lataus säilyvät.
+  // Globaalissa pääohjelmassa render() kutsutaan aina muunnoksen jälkeen.
   window.render = draw;
-  // Sivun esitystilaan siirtyminen edellyttää leveyden uudelleenlaskentaa.
-  const observer = new MutationObserver(() => {
-    if (!renderedXml) return;
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => draw(renderedXml).catch(console.error), 120);
-  });
-  observer.observe(document.body, {attributes:true,attributeFilter:['class']});
-  window.addEventListener('resize', () => {
-    if (!renderedXml) return;
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => draw(renderedXml).catch(console.error), 280);
-  });
+  function redraw() {
+    if (!lastXml) return;
+    clearTimeout(pending);
+    pending = setTimeout(() => draw(lastXml).catch(console.error), 200);
+  }
+  new MutationObserver(redraw).observe(document.body, {attributes:true, attributeFilter:['class']});
+  window.addEventListener('resize', redraw);
 })();
