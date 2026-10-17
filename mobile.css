@@ -1,0 +1,19 @@
+/* Nuottipaja Mobile: käytetään nykyisen index.html:n rinnalla */
+:root{--np-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-behavior:smooth}body{padding-bottom:calc(90px + var(--np-bottom))}button,select,input{touch-action:manipulation}button{min-height:46px}
+.np-mobilebar{position:fixed;z-index:1000;bottom:0;left:0;right:0;display:flex;gap:7px;justify-content:center;padding:9px max(10px,env(safe-area-inset-right)) calc(9px + var(--np-bottom)) max(10px,env(safe-area-inset-left));background:#0e192aee;border-top:1px solid #50627a;backdrop-filter:blur(12px)}
+.np-mobilebar button{flex:1;max-width:230px;padding:10px 4px;font-size:13px;min-width:0;border-radius:11px}
+.np-toolrow{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:12px 0}.np-toolrow button{background:#32465f;color:#fff}.np-toolrow output{font-variant-numeric:tabular-nums;min-width:46px;text-align:center}
+.np-library{padding:12px;border:1px solid #50627a;border-radius:12px;background:#132037;margin-top:12px}
+.np-library button{background:#314660;color:#fff}.np-library-items{display:grid;gap:8px;margin-top:10px}.np-library-item{display:flex;gap:8px;align-items:center;justify-content:space-between;padding:8px;border:1px solid #3a4d67;border-radius:10px}.np-library-item button{max-width:100%;text-align:left}.np-lib-open{flex:1;overflow-wrap:anywhere}.np-lib-delete{flex:0 0 auto;background:#633c49!important}
+.np-hero{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.np-hero button{flex:1;min-width:140px}
+.np-message{font-size:13px;color:#aabbd0;margin:8px 0 0}
+body.np-present{background:#0c1118}body.np-present header,body.np-present .panel:not(.np-score-panel),body.np-present .np-library,body.np-present .np-hero{display:none!important}
+body.np-present .wrap{max-width:100%;padding:0}body.np-present .np-score-panel{margin:0;border:0;border-radius:0;padding:8px 8px 90px;background:#0c1118}body.np-present .np-score-panel h2,body.np-present .np-score-panel #description,body.np-present .np-score-panel>.actions,body.np-present .np-score-panel>p{display:none!important}
+body.np-present #score{border-radius:8px;min-height:75vh;overflow:auto;padding:8px;background:#fff;touch-action:pan-x pan-y}
+#score svg{max-width:none!important;width:calc(100% * var(--np-zoom,1))!important;height:auto!important;min-width:320px}
+.np-mobilebar .np-present-button{background:#20a9c8;color:#001c28}
+.np-present-actions{display:none}body.np-present .np-present-actions{position:fixed;z-index:1001;top:10px;right:10px;display:flex;gap:6px;align-items:center;background:#142339ed;padding:6px;border-radius:11px}
+.np-present-actions button{padding:7px 10px;min-height:42px;background:#32465f;color:white}
+@media(max-width:700px){header{margin:8px 0 15px}header .logo{font-size:24px;padding:9px;border-radius:12px}.panel{margin-bottom:12px}.score{padding:8px;min-height:260px}.actions button{flex:1 1 42%}.wrap{padding:10px}.controls{gap:11px}.np-mobilebar button{font-size:12px}}
+@media print{body{padding:0!important}.np-mobilebar,.np-toolrow,.np-library,.np-hero,.np-present-actions{display:none!important}body.np-present .panel:not(.np-score-panel){display:none!important}body.np-present .np-score-panel{padding:0!important}#score svg{width:100%!important}}
