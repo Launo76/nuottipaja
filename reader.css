@@ -1,13 +1,13 @@
-/* Lukunäkymä v3: käytetään reader.css:n tilalla. */
+/* Nuottipaja lukunäkymä v4 — responsiivinen, kahden sormen zoom */
 body.np-present{background:#fff!important;color:#111!important}
 body.np-present .wrap{max-width:none!important;margin:0!important;padding:0!important}
 body.np-present .np-score-panel{background:#fff!important;padding:0!important;margin:0!important;border:0!important}
-body.np-present #score{background:#fff!important;color:#111!important;border-radius:0!important;padding:4px 5px 42px!important;min-height:0!important;overflow-x:hidden!important;overflow-y:visible!important;touch-action:pan-y}
-body.np-present #score svg{display:block!important;max-width:100%!important;width:100%!important;height:auto!important;margin:0!important}
+#score{min-width:0!important;max-width:100%!important;box-sizing:border-box!important}
+body.np-present #score{background:white!important;color:#111!important;padding:4px 0 24px!important;overflow:visible!important;min-height:0!important}
+#np-reader-viewport{width:100%!important;max-width:100%;overflow-x:auto!important;overflow-y:hidden!important;touch-action:pan-y;scrollbar-width:thin}
+#np-reader-canvas svg{max-width:none!important;display:block!important}
 body.np-present .np-toolrow{display:none!important}
-/* Esityspainikkeet pysyvät ylhäällä, eikä alareuna peitä nuotteja. */
-body.np-present .np-present-actions{position:sticky!important;top:0!important;bottom:auto!important;left:auto!important;right:auto!important;z-index:30!important;width:max-content!important;margin:0 0 0 auto!important;padding:4px 6px!important;border-radius:0 0 0 12px!important;box-shadow:0 1px 8px #0003!important;background:#182b40ee!important}
-body.np-present .np-present-actions button{font-size:13px!important;min-height:36px!important;padding:6px 10px!important}
+body.np-present .np-present-actions{position:fixed!important;top:72px!important;bottom:auto!important;right:8px!important;left:auto!important;z-index:50!important;width:max-content!important;padding:4px!important;transform:none!important;box-shadow:0 2px 8px #0003!important;border-radius:10px!important;background:#182b40dd!important}
+body.np-present .np-present-actions button{font-size:13px!important;min-height:34px!important;padding:5px 8px!important}
 body.np-present .np-mobilebar{display:none!important}
-@media(max-width:720px){body.np-present #score{padding:4px 2px 20px!important}}
-@media print{body.np-present .np-present-actions,body.np-present .np-mobilebar{display:none!important}body.np-present #score{padding:0!important}}
+@media print{.np-present-actions,.np-mobilebar{display:none!important}#np-reader-viewport{overflow:visible!important}}
